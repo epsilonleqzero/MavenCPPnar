@@ -62,6 +62,16 @@
             <artifactId>nar-maven-plugin</artifactId>
             <version>3.5.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.knowm.xchart</groupId>
+            <artifactId>xchart</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jblas</groupId>
+            <artifactId>jblas</artifactId>
+            <version>1.2.4</version>
+        </dependency>
     </dependencies>
     <profiles>
         <profile>
@@ -72,10 +82,8 @@
                         <groupId>com.github.maven-nar</groupId>
                         <artifactId>nar-maven-plugin</artifactId>
                         <configuration>
-                            <aol>x86_64-w64-mingw32-gcc</aol>
-                            <gnuUseOnWindows>true</gnuUseOnWindows>
                             <c>
-<!--                                 add your equivalent of C:\cygwin64\bin to your PATH environment variable -->
+                                <!--                                 add your equivalent of C:\cygwin64\bin to your PATH environment variable -->
                                 <name>gcc</name>
                                 <debug>false</debug>
                                 <includes>
@@ -85,6 +93,8 @@
                                     <option>-D__int64=int64_t</option>
                                     <option>-I${JAVA_HOME}/include</option>
                                     <option>-I${JAVA_HOME}/include/win32</option>
+                                    <option>-lblas</option>
+                                    <option>-llapack</option>
                                     <option>${java.os.include}</option>
                                     <option>${stack.protector.option}</option>
                                     <option>${architecture.option}</option>
@@ -106,12 +116,13 @@
                                     <include>**/*.cpp</include>
                                 </includes>
                                 <options>
-<!--                                    <option>-std=c++11</option>-->
+                                    <!--                                    <option>-std=c++11</option>-->
                                     <option>-D__int64=int64_t</option>
                                     <option>-I${JAVA_HOME}/include</option>
                                     <option>-I${JAVA_HOME}/include/win32</option>
                                     <option>-lblas</option>
                                     <option>-llapack</option>
+                                    <option>-larmadillo</option>
                                     <option>${java.os.include}</option>
                                     <option>${stack.protector.option}</option>
                                     <option>${architecture.option}</option>
@@ -125,6 +136,20 @@
                     
                             <linker>
                                 <name>g++</name>
+                                <sysLibs>
+                                    <sysLib>
+                                        <name>blas</name>
+                                        <type>static</type>
+                                    </sysLib>
+                                    <sysLib>
+                                        <name>lapack</name>
+                                        <type>static</type>
+                                    </sysLib>
+                                    <sysLib>
+                                        <name>armadillo</name>
+                                        <type>static</type>
+                                    </sysLib>
+                                </sysLibs>
                                 <options>
                                     <option>${architecture.option}</option>
                                     <option>${subsystem.option}</option>
